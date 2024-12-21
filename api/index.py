@@ -1,6 +1,14 @@
-from flask import Flask
+from flask import Flask, jsonify
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
+
+
+@app.route("/")
+def index():
+    return "<p>Flask Server Up and Running</p>"
 
 @app.route("/api/python")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return jsonify({"message": "Flask Server Up and Running"})
