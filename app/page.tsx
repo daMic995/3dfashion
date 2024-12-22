@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import integrations from './integrations';
+import MannequinViewer from './load3dmodel';
+
 
 function index() {
   const [message, setMessage] = useState('Loading...');
@@ -253,6 +255,15 @@ export default function Home() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* 3D Model Section */}
+      <section id="model" className="bg-white w-full relative py-10 md:py-16 lg:py-24 xl:py-40 border-t border-gray-200 px-8 xl:px-0">
+        <div className="container max-w-6xl mx-auto h-full flex flex-col justify-between items-center">
+          <h2 className="text-indigo-500 uppercase text-base font-medium tracking-tight my-5">3D Model</h2>
+          <MannequinViewer modelUrl="/models/male.glb"/>
+          <MannequinViewer modelUrl="/models/female.glb"/>
         </div>
       </section>
 
