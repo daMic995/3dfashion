@@ -4,7 +4,6 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import integrations from './integrations';
 
-
 function index() {
   const [message, setMessage] = useState('Loading...');
 
