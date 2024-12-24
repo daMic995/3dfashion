@@ -54,11 +54,11 @@ export default function Home() {
             ))}
 
             <div className="block md:hidden border-t border-gray-200 font-medium flex flex-col w-full">
-              <a href="#_" className="py-2 text-pink-500 w-full text-center font-bold">
+              <a href="/login" className="py-2 text-pink-500 w-full text-center font-bold">
                 Login
               </a>
               <a
-                href="#_"
+                href="/login"
                 className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative"
               >
                 Get Started
@@ -248,7 +248,7 @@ export default function Home() {
 
           <div className="flex flex-col items-end justify-center h-full w-full lg:w-1/2 ms:pl-10 relative z-50">
             <div className="relative lg:absolute max-w-4xl xl:max-w-6xl left-0 container lg:w-screen w-full">
-              <img src="https://cdn.devdojo.com/images/september2020/macbook-mockup.png"
+              <img src="/Mannequin_Image-removebg.png"
                     className="mt-20 lg:mt-24 xl:mt-40 w-full h-auto mb-20 lg:mb-0 lg:h-full ml-0 lg:-ml-12 h-auto"/>
             </div>
           </div>

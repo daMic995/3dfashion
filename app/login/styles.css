@@ -1,0 +1,12 @@
+.container {
+    /* ... */
+    display: grid;}
+  
+.form-container {
+    /* ... */
+    transition: transform 0.6s ease-in-out;
+}
+  
+.form-container.active {
+    transform: translateX(0);
+}
