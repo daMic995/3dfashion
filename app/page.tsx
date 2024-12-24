@@ -54,11 +54,11 @@ export default function Home() {
             ))}
 
             <div className="block md:hidden border-t border-gray-200 font-medium flex flex-col w-full">
-              <a href="/login" className="py-2 text-pink-500 w-full text-center font-bold">
+              <a href="#_" className="py-2 text-pink-500 w-full text-center font-bold">
                 Login
               </a>
               <a
-                href="/login"
+                href="#_"
                 className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative"
               >
                 Get Started
@@ -181,7 +181,7 @@ export default function Home() {
               </p>
             <a href="/model"
               className="mt-0 sm:mt-1 px-8 py-4 rounded-md font-bold text-base bg-indigo-600 shadow-xl text-white border-t border-gray-200 w-auto relative self-start inline-block lg:mx-0 mx-auto">
-              Launch
+              3D Model Tool
             </a>
             
             {/* Integrations */}
