@@ -3,8 +3,8 @@
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
-import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Group } from 'three';
 
 
 const ModelLoader = ({ url }: { url: string }) => {

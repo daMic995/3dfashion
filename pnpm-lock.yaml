@@ -50,6 +50,9 @@ importers:
       tailwindcss:
         specifier: 3.3.2
         version: 3.3.2
+      three:
+        specifier: ^0.171.0
+        version: 0.171.0
       typescript:
         specifier: 5.0.4
         version: 5.0.4
