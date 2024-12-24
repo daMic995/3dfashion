@@ -1,39 +1,32 @@
-import { Canvas, useLoader, useThree } from '@react-three/fiber';
-import { Suspense, useEffect } from 'react';
+'use client';
+import { Canvas, useLoader } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import { Suspense, useRef } from 'react';
+import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import * as THREE from 'three';
-
-
-const ModelLoader = ({ url } : {url: string}) => {
+const ModelLoader = ({ url }: { url: string }) => {
     const gltf = useLoader(GLTFLoader, url);
-    const { camera } = useThree();
+    const group = useRef<Group>(null);
 
-    useEffect(() => {
-        const box = new THREE.Box3().setFromObject(gltf.scene);
-        const center = new THREE.Vector3();
-        box.getCenter(center);
-        const size = new THREE.Vector3();
-        box.getSize(size);
-
-        const maxDimension = Math.max(size.x, size.y, size.z);
-        const distance = maxDimension * 2; // Distance to fit model within the view
-        camera.position.set(center.x, center.y, center.z + distance); // Move camera
-        camera.lookAt(center); // Focus camera on model
-    }, [gltf, camera]);
-    return <primitive object={gltf.scene} />;
+    return (
+        <group ref={group}>
+            <primitive object={gltf.scene} />
+        </group>
+    );
 };
 
 const LoadingSpinner = () => {
-    return <mesh><sphereGeometry args={[1, 16, 16]} /><meshStandardMaterial color="white" /></mesh>;
+    return <mesh><sphereGeometry args={[1, 10, 10]} /><meshStandardMaterial color="black" /></mesh>;
 };
 
 const MannequinViewer = ({ modelUrl }: { modelUrl: string }) => {
     return (
-        <Canvas>
-            <ambientLight intensity={0.5} />
+        <Canvas gl={{ antialias: true }} dpr={[1, 5]}>
+            <ambientLight intensity={1} />
             <Suspense fallback={<LoadingSpinner />}>
                 <ModelLoader url={modelUrl} />
+                <OrbitControls />
             </Suspense>
         </Canvas>
     );
