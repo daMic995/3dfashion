@@ -179,7 +179,7 @@ export default function Home() {
             <p className="text-base sm:text-lg xl:text-xl text-gray-500 mb-8 pr-0 lg:pr-20">
               Envision. Design. Tailor.
               </p>
-            <a href="#_"
+            <a href="/model"
               className="mt-0 sm:mt-1 px-8 py-4 rounded-md font-bold text-base bg-indigo-600 shadow-xl text-white border-t border-gray-200 w-auto relative self-start inline-block lg:mx-0 mx-auto">
               Launch
             </a>
