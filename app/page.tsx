@@ -13,11 +13,74 @@ function index() {
       .then(data => setMessage(data.message));
   }, []);
 
-  return <p>{message}</p>;
+  return {'message': <p>{message}</p>, 'status': 200};
+}
+
+const HomeSVG = () => {
+  return (
+    <svg className="hidden lg:block absolute w-screen max-w-3xl -mt-64 -ml-12 left-0 top-0" viewBox="0 0 818 815"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink">
+       <defs>
+        <linearGradient id="c" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop stopColor="#E614F2" offset="0%" />
+          <stop stopColor="#FC3832" offset="100%" />
+        </linearGradient>
+        <linearGradient id="f" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop stopColor="#657DE9" offset="0%" />
+          <stop stopColor="#1C0FD7" offset="100%" />
+        </linearGradient>
+        <filter id="a" x="-4.7%" y="-3.3%" width="109.3%" height="109.3%" filterUnits="objectBoundingBox">
+          <feOffset dy="8" in="SourceAlpha" result="shadowOffsetOuter1" />
+          <feGaussianBlur
+            stdDeviation="8"
+            in="shadowOffsetOuter1"
+            result="shadowBlurOuter1"/>
+          <feColorMatrix
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"
+            in="shadowBlurOuter1"/>
+        </filter>
+        <filter id="d" x="-4.7%" y="-3.3%" width="109.3%" height="109.3%" filterUnits="objectBoundingBox">
+          <feOffset dy="8" in="SourceAlpha" result="shadowOffsetOuter1" />
+          <feGaussianBlur
+            stdDeviation="8"
+            in="shadowOffsetOuter1"
+            result="shadowBlurOuter1"/>
+            <feColorMatrix
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+              in="shadowBlurOuter1"/>
+        </filter>
+        <path id="b"
+          d="M160.52 108.243h497.445c17.83 0 24.296 1.856 30.814 5.342 6.519 3.486 11.635 8.602 15.12 15.12 3.487 6.52 5.344 12.985 5.344 30.815v497.445c0 17.83-1.857 24.296-5.343 30.814-3.486 6.519-8.602 11.635-15.12 15.12-6.52 3.487-12.985 5.344-30.815 5.344H160.52c-17.83 0-24.296-1.857-30.814-5.343-6.519-3.486-11.635-8.602-15.12-15.12-3.487-6.52-5.343-12.985-5.343-30.815V159.52c0-17.83 1.856-24.296 5.342-30.814 3.486-6.519 8.602-11.635 15.12-15.12 6.52-3.487 12.985-5.343 30.815-5.343z"/>
+        <path id="e"
+          d="M159.107 107.829H656.55c17.83 0 24.296 1.856 30.815 5.342 6.518 3.487 11.634 8.602 15.12 15.12 3.486 6.52 5.343 12.985 5.343 30.816V656.55c0 17.83-1.857 24.296-5.343 30.815-3.486 6.518-8.602 11.634-15.12 15.12-6.519 3.486-12.985 5.343-30.815 5.343H159.107c-17.83 0-24.297-1.857-30.815-5.343-6.519-3.486-11.634-8.602-15.12-15.12-3.487-6.519-5.343-12.985-5.343-30.815V159.107c0-17.83 1.856-24.297 5.342-30.815 3.487-6.519 8.602-11.634 15.12-15.12 6.52-3.487 12.985-5.343 30.816-5.343z"/>
+      </defs>
+      <g fill="none" fillRule="evenodd" opacity=".9">
+        <g transform="rotate(65 416.452 409.167)">
+          <use fill="#000" filter="url(#a)" xlinkHref="#b" />
+          <use fill="url(#c)" xlinkHref="#b" />
+        </g>
+        <g transform="rotate(29 421.929 414.496)">
+          <use fill="#000" filter="url(#d)" xlinkHref="#e" />
+          <use fill="url(#f)" xlinkHref="#e" />
+        </g>
+      </g>
+    </svg>
+  );
 }
 
 
 export default function Home() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Check if user is logged in
+            const userId = localStorage.getItem('user_id');
+            console.log(userId);
+            setIsLoggedIn(!!userId);
+        }
+    }, []);
 
   const [isNavVisible, setNavVisible] = useState(false);
 
@@ -43,7 +106,7 @@ export default function Home() {
               isNavVisible ? "flex" : "hidden"
             } md:flex items-center md:relative`}
           >
-            {["Home", "Features", "Pricing", "Testimonials"].map((link) => (
+            {["Home", "Features"].map((link) => (
               <a
                 key={link}
                 href={`#${link.toLowerCase()}`}
@@ -53,108 +116,45 @@ export default function Home() {
               </a>
             ))}
 
+          {isLoggedIn ? (
             <div className="block md:hidden border-t border-gray-200 font-medium flex flex-col w-full">
-              <a href="#_" className="py-2 text-pink-500 w-full text-center font-bold">
-                Login
-              </a>
-              <a
-                href="#_"
-                className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative"
-              >
-                Get Started
+              <a href="/logout" className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative">
+                  Logout
               </a>
             </div>
+          ) : (
+              <div className="block md:hidden border-t border-gray-200 font-medium flex flex-col w-full">
+                  <a href="/login" className="py-2 text-pink-500 w-full text-center font-bold">
+                      Login
+                  </a>
+                  <a href="/login" className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative">
+                      Get Started
+                  </a>
+              </div>
+          )}
+
           </nav>
 
           {/* Login Button */}
-          <div
-            className="absolute left-0 md:relative w-full md:w-auto md:bg-transparent border-b md:border-none border-gray-200 mt-48 md:mt-0 flex-col md:flex-row pb-8 md:p-0 justify-center items-center md:items-end hidden md:flex md:justify-between">
-            <a
-              href="#_"
-              className="px-3 md:px-5 py-2 text-sm text-pink-500 lg:text-white font-bold mr-0 sm:mr-3 relative z-40 md:mt-0">
+          
+          {isLoggedIn ? (
+          <div className="absolute left-0 md:relative w-full md:w-auto md:bg-transparent border-b md:border-none border-gray-200 mt-48 md:mt-0 flex-col md:flex-row pb-8 md:p-0 justify-center items-center md:items-end hidden md:flex md:justify-between">
+            <a href="/logout" className="px-5 py-3 rounded font-bold text-sm transition-all duration-300 leading-none bg-indigo-700 lg:bg-white text-white lg:text-indigo-700 w-auto sm:w-full h-full inline-block font-bold relative shadow-md lg:shadow-none hover:shadow-xl duration-100 transition z-40">
+              Logout
+            </a>
+            <HomeSVG />
+          </div>
+          ) : (
+          <div className="absolute left-0 md:relative w-full md:w-auto md:bg-transparent border-b md:border-none border-gray-200 mt-48 md:mt-0 flex-col md:flex-row pb-8 md:p-0 justify-center items-center md:items-end hidden md:flex md:justify-between">
+            <a href="/login" className="px-3 md:px-5 py-2 text-sm text-pink-500 lg:text-white font-bold mr-0 sm:mr-3 relative z-40 md:mt-0">
               Login
             </a>
-            <a
-              href="#_"
-              className="px-5 py-3 rounded font-bold text-sm transition-all duration-300 leading-none bg-indigo-700 lg:bg-white text-white lg:text-indigo-700 w-auto sm:w-full h-full inline-block font-bold relative shadow-md lg:shadow-none hover:shadow-xl duration-100 transition z-40">
+            <a href="/login" className="px-5 py-3 rounded font-bold text-sm transition-all duration-300 leading-none bg-indigo-700 lg:bg-white text-white lg:text-indigo-700 w-auto sm:w-full h-full inline-block font-bold relative shadow-md lg:shadow-none hover:shadow-xl duration-100 transition z-40">
               Get Started
             </a>
-
-            {/* SVGs */}
-            <svg
-              className="hidden lg:block absolute w-screen max-w-3xl -mt-64 -ml-12 left-0 top-0"
-              viewBox="0 0 818 815"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-            >
-              <defs>
-                <linearGradient id="c" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop stopColor="#E614F2" offset="0%" />
-                  <stop stopColor="#FC3832" offset="100%" />
-                </linearGradient>
-                <linearGradient id="f" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop stopColor="#657DE9" offset="0%" />
-                  <stop stopColor="#1C0FD7" offset="100%" />
-                </linearGradient>
-                <filter
-                  id="a"
-                  x="-4.7%"
-                  y="-3.3%"
-                  width="109.3%"
-                  height="109.3%"
-                  filterUnits="objectBoundingBox"
-                >
-                  <feOffset dy="8" in="SourceAlpha" result="shadowOffsetOuter1" />
-                  <feGaussianBlur
-                    stdDeviation="8"
-                    in="shadowOffsetOuter1"
-                    result="shadowBlurOuter1"
-                  />
-                  <feColorMatrix
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"
-                    in="shadowBlurOuter1"
-                  />
-                </filter>
-                <filter
-                  id="d"
-                  x="-4.7%"
-                  y="-3.3%"
-                  width="109.3%"
-                  height="109.3%"
-                  filterUnits="objectBoundingBox"
-                >
-                  <feOffset dy="8" in="SourceAlpha" result="shadowOffsetOuter1" />
-                  <feGaussianBlur
-                    stdDeviation="8"
-                    in="shadowOffsetOuter1"
-                    result="shadowBlurOuter1"
-                  />
-                  <feColorMatrix
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
-                    in="shadowBlurOuter1"
-                  />
-                </filter>
-                <path
-                  id="b"
-                  d="M160.52 108.243h497.445c17.83 0 24.296 1.856 30.814 5.342 6.519 3.486 11.635 8.602 15.12 15.12 3.487 6.52 5.344 12.985 5.344 30.815v497.445c0 17.83-1.857 24.296-5.343 30.814-3.486 6.519-8.602 11.635-15.12 15.12-6.52 3.487-12.985 5.344-30.815 5.344H160.52c-17.83 0-24.296-1.857-30.814-5.343-6.519-3.486-11.635-8.602-15.12-15.12-3.487-6.52-5.343-12.985-5.343-30.815V159.52c0-17.83 1.856-24.296 5.342-30.814 3.486-6.519 8.602-11.635 15.12-15.12 6.52-3.487 12.985-5.343 30.815-5.343z"
-                />
-                <path
-                  id="e"
-                  d="M159.107 107.829H656.55c17.83 0 24.296 1.856 30.815 5.342 6.518 3.487 11.634 8.602 15.12 15.12 3.486 6.52 5.343 12.985 5.343 30.816V656.55c0 17.83-1.857 24.296-5.343 30.815-3.486 6.518-8.602 11.634-15.12 15.12-6.519 3.486-12.985 5.343-30.815 5.343H159.107c-17.83 0-24.297-1.857-30.815-5.343-6.519-3.486-11.634-8.602-15.12-15.12-3.487-6.519-5.343-12.985-5.343-30.815V159.107c0-17.83 1.856-24.297 5.342-30.815 3.487-6.519 8.602-11.634 15.12-15.12 6.52-3.487 12.985-5.343 30.816-5.343z"
-                />
-              </defs>
-              <g fill="none" fillRule="evenodd" opacity=".9">
-                <g transform="rotate(65 416.452 409.167)">
-                  <use fill="#000" filter="url(#a)" xlinkHref="#b" />
-                  <use fill="url(#c)" xlinkHref="#b" />
-                </g>
-                <g transform="rotate(29 421.929 414.496)">
-                  <use fill="#000" filter="url(#d)" xlinkHref="#e" />
-                  <use fill="url(#f)" xlinkHref="#e" />
-                </g>
-              </g>
-            </svg>
+            <HomeSVG />
           </div>
+          )}
 
           {/* Mobile Menu Button */}
           <button onClick={toggleNav} id="nav-mobile-btn" className="w-6 absolute block md:hidden right-0 top-0 mr-10 mt-8 sm:mt-10 z-50 cursor-pointer select-none">

@@ -58,3 +58,29 @@ body {
 .theme-switch {
   cursor: pointer;
 }
+
+#body-part-header {
+  grid-column: 1 / span 1;
+  width: 80%;
+  padding: 10px;
+}
+
+#body-part-value-header {
+  grid-column: 2 / span 1;
+  width: 20%;
+  padding: 10px;
+}
+
+#body-part {
+  grid-column: 1 / span 1;
+  width: 80%;
+  border: 1px solid grey;
+  padding: 10px;
+}
+
+#body-part-value {
+  grid-column: 2 / span 1;
+  width: 20%;
+  border: 1px solid grey;
+  padding: 10px;
+}
