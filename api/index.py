@@ -45,23 +45,21 @@ def authenticate():
     if request.method == "GET":
         # Get the user_id from the query parameter
         user_id = request.args.get('user_id')
-        print("\nReceived user_id:", user_id, "\n")
+
         # Loop through the users and check if the user_id matches
         for user in users:
             if user['id'] == int(user_id):
-                print("\nUser Authenticated\n")
+
                 # Return the user object
                 user = {key: value for key, value in user.items() if key != 'password'}
                 return jsonify({"message": "User Authenticated", "user_info": user, "status": 200})
         
         # If the user_id does not match, return a 404 error
-        print("\nUser Not Found\n")
         return jsonify({"message": "User Not Found", "status": 404})
     
     elif request.method == "POST":
         # Get the data from the request body
         data = request.json
-        print("\nReceived data:", data, "\n")
 
         # Get the email and password from the data
         email = data.get('email')
@@ -70,10 +68,8 @@ def authenticate():
         # Loop through the users and check if the email and password matches
         for user in users:
             if user['email'] == email and user['password'] == password:
-                print("\nUser Authenticated\n")
                 # Return the user_id
                 return jsonify({"message": "User Authenticated", "user_id": user['id'], "status": 200})
         
         # If the email and password does not match, return a 404 error
-        print("\nUser Not Found\n")
         return jsonify({"message": "User Not Found", "status": 404})

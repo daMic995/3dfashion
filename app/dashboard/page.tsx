@@ -1,5 +1,5 @@
 "use client"
-import { LifeBuoy, Receipt, Boxes, Bell, UserCircle, Package, LayoutDashboard, Settings, Pencil, ChevronFirst, MoreVertical } from "lucide-react";
+import { LifeBuoy, Receipt, Bell, UserCircle, Package, LayoutDashboard, Settings, Pencil, Ruler, ChevronFirst, MoreVertical } from "lucide-react";
 import { createContext, useContext, useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -136,6 +136,7 @@ export default function Dashboard() {
             <Sidebar user={user}>
                 <SidebarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={activeItem === "Dashboard"} onClick={() => handleItemClick("Dashboard")}/>
                 <SidebarItem icon={<Pencil size={20}/>} text="Designs" active={activeItem === "Designs"} onClick={() => handleItemClick("Designs")}/>
+                <SidebarItem icon={<Ruler size={20}/>} text="Measurement" active={activeItem === "Body Measurements"} onClick={() => handleItemClick("Body Measurements")}/>
                 <SidebarItem icon={<Package size={20}/>} text="Orders" active={activeItem === "Orders"} onClick={() => handleItemClick("Orders")} alert/>
                 <SidebarItem icon={<Receipt size={20}/>} text="Billings" active={activeItem === "Billings"} onClick={() => handleItemClick("Billings")}/>
 

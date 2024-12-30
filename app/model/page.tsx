@@ -27,7 +27,7 @@ export default function Model() {
                     </div>
                 </section>
                 <section id="model" className="col-span-4">
-                    <MannequinViewer modelUrl="/models/robot_playground.glb" />
+                    <MannequinViewer modelUrl="/models/female.glb" />
                 </section>
             </div>
         </div>
