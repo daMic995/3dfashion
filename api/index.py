@@ -1,6 +1,11 @@
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 from flask_cors import CORS
+import os
+from dotenv import load_dotenv
+import boto3
+from db import *
+from id import generate_user_id
 import requests
 import json
 
@@ -8,6 +13,44 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 CORS(app)
+
+# Load environment variables from .env file
+load_dotenv()
+
+def create_session():
+    """
+    Create a Boto3 session object.
+
+    The session object is used to create a DynamoDB client object,
+    which is then used to interact with the DynamoDB table.
+
+    :return: A Boto3 session object.
+    """
+    print('Connecting to AWS DynamoDB...')
+
+    # Create a Boto3 session object
+    session = boto3.Session(
+        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+        region_name=os.getenv('AWS_REGION')
+    )
+
+    print('Connection to AWS DynamoDB Established!')
+
+    # Create a DynamoDB client object
+    global db
+    db = session.client('dynamodb')
+    print('AWS DynamoDB Session Created!')
+
+
+@app.before_request
+def before_request():
+    """
+    This function is executed before every request.
+    It sets up a connection to the AWS DynamoDB by creating a session.
+    """
+    # Establish a session with AWS DynamoDB
+    create_session()
 
 
 @app.route("/")
@@ -29,29 +72,26 @@ def authenticate():
     Returns:
         Response: The response object
     """
-    users = [{
-            "id": 1,
-            "name": "John Snow",
-            "email": "iR5tO@example.com",
-            "password": "123456"
-        },
-        {
-            "id": 2,
-            "name": "Daenerys Targaryen",
-            "email": "L5TtW@example.com",
-            "password": "654321"
-        }]
 
     if request.method == "GET":
         # Get the user_id from the query parameter
         user_id = request.args.get('user_id')
 
-        # Loop through the users and check if the user_id matches
-        for user in users:
-            if user['id'] == int(user_id):
+        # Get all the users from the database
+        users = get_all_users(db)
 
-                # Return the user object
-                user = {key: value for key, value in user.items() if key != 'password'}
+        # If the user_id does not exist, return a 404 error
+
+        # Loop through the users and check if the user_id matches
+        for user in users['Items']:
+            if user['ID']['N'] == user_id:
+                print('User Found!')
+                # Get the user information
+                user = {'first_name': user['First_Name']['S'], 
+                        'last_name': user['Last_Name']['S'], 
+                        'email': user['Email']['S']}
+
+                # Return the user information
                 return jsonify({"message": "User Authenticated", "user_info": user, "status": 200})
         
         # If the user_id does not match, return a 404 error
@@ -65,11 +105,17 @@ def authenticate():
         email = data.get('email')
         password = data.get('password')
 
-        # Loop through the users and check if the email and password matches
-        for user in users:
-            if user['email'] == email and user['password'] == password:
-                # Return the user_id
-                return jsonify({"message": "User Authenticated", "user_id": user['id'], "status": 200})
-        
-        # If the email and password does not match, return a 404 error
-        return jsonify({"message": "User Not Found", "status": 404})
+        # Get the user by email from the database
+        response = get_user(db, email)
+
+        if not response:
+            return jsonify({"message": "User Not Found", "status": 404})
+
+        user = response
+
+        # Check if the password is correct
+        if not (user['Password']['S'] == password):
+            return jsonify({"message": "Invalid Password", "status": 401})
+
+        # Return the user_id
+        return jsonify({"message": "User Authenticated", "user_id": user['ID']['N'], "status": 200})

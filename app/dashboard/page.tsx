@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 const SidebarContext = createContext({expanded: true});
 
-function Sidebar({children, user}: {children: React.ReactNode, user: { id: string; name: string; email: string }}) {
+function Sidebar({children, user}: {children: React.ReactNode, user: {first_name: string; last_name: string; email: string }}) {
     const [expanded, setExpanded] = useState(true);
 
     return (
@@ -28,14 +28,14 @@ function Sidebar({children, user}: {children: React.ReactNode, user: { id: strin
                 </SidebarContext.Provider>
 
                 <div className="border-t flex px-5 py-4">
-                    <img src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${user.name.replace(" ", "+")}`}
+                    <img src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${user.first_name}+${user.last_name}`}
                          className="w-10 h-10 rounded-md" alt="avatar"/>
 
                     <div className={`flex justify-between items-center overflow-hidden transition-all duration-200
                         ${expanded? "w-52 ml-3" : "w-0"}`}>
 
                         <div className="leading-4">
-                            <h4 className="text-gray-600 flex font-semibold">{user.name}</h4>
+                            <h4 className="text-gray-600 flex font-semibold">{user.first_name}</h4>
                             <span className="text-xs text-gray-400">{user.email}</span>
                         </div>
                         <MoreVertical size={20}/>
@@ -79,7 +79,7 @@ function SidebarItem({icon, text, active, alert, onClick}: {icon: React.ReactNod
 }
 
 export default function Dashboard() {
-    const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
+    const [user, setUser] = useState<{first_name: string; last_name: string; email: string } | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeItem, setActiveItem] = useState<string | null>(null);
     const router = useRouter();
@@ -166,7 +166,7 @@ export default function Dashboard() {
 
                 <div className="flex-1 overflow-y-auto">
                     <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">Welcome, {user.name}!</h3>
+                        <h3 className="text-lg font-semibold mb-4">Welcome, {user.first_name}!</h3>
                         <p className="text-gray-600">This is your dashboard page.</p>
                     </div>
                 </div>
