@@ -120,11 +120,11 @@ export default function Dashboard() {
     }, [router]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     }
 
     if (!user) {
-        return <div>Failed to load user info</div>;
+        return <div className="min-h-screen flex items-center justify-center">Failed to load user info</div>;
     }
 
     const handleItemClick = (item: string) => {

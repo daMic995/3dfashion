@@ -1,11 +1,20 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
     const router = useRouter();
 
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const loginAccessed = params.get('login_accessed');
+        if (loginAccessed) {
+            console.log('Login accessed:', loginAccessed);
+            setIsLogin(loginAccessed === 'true'); // Convert to boolean
+        }
+    }, []);  
+    
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const response = await fetch('/api/python/authenticate', {
@@ -16,7 +25,7 @@ export default function AuthPage() {
             body: JSON.stringify({ email: loginEmail, password: loginPassword }),
         });
         const data = await response.json();
-        setMessage(data.message);
+        setMessage1(data.message);
         setStatus(data.status);
 
         if (data.status === 200) {
@@ -35,7 +44,7 @@ export default function AuthPage() {
             body: JSON.stringify({ email: signUpEmail, password: signUpPassword, firstName, lastName }),
         });
         const data = await response.json();
-        setMessage(data.message);
+        setMessage2(data.message);
         setStatus(data.status);
 
         if (data.status === 200) {
@@ -50,15 +59,17 @@ export default function AuthPage() {
     const [signUpPassword, setSignUpPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [message, setMessage] = useState('');
+    const [message1, setMessage1] = useState('');
+    const [message2, setMessage2] = useState('');
     const [status, setStatus] = useState(200);
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center items-center">
             <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1 relative overflow-hidden">
-                <div className="grid grid-cols-2 w-full">
+                <div className="grid grid-cols-2 w-full relative" id='container'>
                     {/* Login Form */}
-                    <div className={`p-6 sm:p-12 ${isLogin ? 'translate-x-0' : ' -translate-x-full'}`}>
+                    <div className={`p-6 sm:p-12 transform transition-transform duration-700 
+                        ${isLogin ? 'translate-x-0 z-10' : ' -translate-x-full z-0'} `} id='login'>
                         <div className="mt-12 flex flex-col items-center">
                             <h1 className="text-2xl xl:text-3xl font-extrabold">Login</h1>
                             <div className="w-full flex-1 mt-8">
@@ -97,7 +108,7 @@ export default function AuthPage() {
                                                 {" "} and its {" "}
                                                 <a href="#" className="border-b border-gray-500 border-dotted">Privacy Policy</a>
                                             </p>
-                                            {message && status === 404 && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
+                                            {message1 && status !== 200 && <p className="mt-4 text-sm text-center text-red-500">{message1}</p>}
                                         </div>
                                     </div>
                                 </form>
@@ -105,7 +116,8 @@ export default function AuthPage() {
                         </div>
                     </div>
                     {/* Signup Form */}
-                    <div className={`p-6 sm:p-12 ${isLogin ? 'translate-x-full' : 'translate-x-0'}`}>
+                    <div className={`p-6 sm:p-12 transform transition-transform duration-700 
+                        ${isLogin ? 'translate-x-full z-0' : 'translate-x-0 z-10'}`} id='signup'>
                         <div className="mt-1 flex flex-col items-center">
                             <h1 className="text-2xl xl:text-3xl font-extrabold">Create Account</h1>
                             <div className="w-full flex-1 mt-8">
@@ -146,7 +158,7 @@ export default function AuthPage() {
                                                 {" "} and its {" "}
                                                 <a href="#" className="border-b border-gray-500 border-dotted">Privacy Policy</a>
                                             </p>
-                                            {message && status === 404 && <p className="mt-4 text-sm text-center text-red-500">{message}</p>}
+                                            {message2 && status !== 200 && <p className="mt-4 text-sm text-center text-red-500">{message2}</p>}
                                         </div>
                                     </div>
                                 </form>
@@ -155,7 +167,7 @@ export default function AuthPage() {
                     </div>
                 </div>
                 {/* Overlay Container */}
-                <div className="absolute inset-0 w-full h-full flex">
+                <div className="absolute inset-0 w-full h-full flex" id='overlay'>
                     <div className={`w-1/2 h-full bg-indigo-500 text-white flex flex-col items-center justify-center transform transition-transform duration-700 ${isLogin ? "-translate-x-full" : "translate-x-0"}`}>
                         <h2 className="text-3xl font-bold mb-3">Welcome Back!</h2>
                         <p className="mb-5">To keep connected, please login with your details.</p>

@@ -12,8 +12,8 @@ def insert_user(db, user):
         TableName='Users',
         Item={
             'Email': {'S': user['email']},  # Use the 'S' data type for strings
-            'Last_Name': {'S': user['Last_Name']},
-            'First_Name': {'S': user['First_Name']},
+            'Last_Name': {'S': user['last_name']},
+            'First_Name': {'S': user['first_name']},
             'ID': {'N': user['id']},  # Use the 'N' data type for numbers
             'Password': {'S': user['password']}
         }
@@ -37,8 +37,9 @@ def get_user(db, email):
         ExpressionAttributeValues={
             ':email': {'S': email}
         })
+    
     # The response will contain a single item in the Items list
-    return response['Items'][0]
+    return response
 
 def get_all_users(db):
     """

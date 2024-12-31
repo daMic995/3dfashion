@@ -124,10 +124,10 @@ export default function Home() {
             </div>
           ) : (
               <div className="block md:hidden border-t border-gray-200 font-medium flex flex-col w-full">
-                  <a href="/login" className="py-2 text-pink-500 w-full text-center font-bold">
+                  <a href={`/login?login_accessed=${true}`} className="py-2 text-pink-500 w-full text-center font-bold">
                       Login
                   </a>
-                  <a href="/login" className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative">
+                  <a href={`/login?login_accessed=${false}`} className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative">
                       Get Started
                   </a>
               </div>
@@ -146,10 +146,10 @@ export default function Home() {
           </div>
           ) : (
           <div className="absolute left-0 md:relative w-full md:w-auto md:bg-transparent border-b md:border-none border-gray-200 mt-48 md:mt-0 flex-col md:flex-row pb-8 md:p-0 justify-center items-center md:items-end hidden md:flex md:justify-between">
-            <a href="/login" className="px-3 md:px-5 py-2 text-sm text-pink-500 lg:text-white font-bold mr-0 sm:mr-3 relative z-40 md:mt-0">
+            <a href={`/login?login_accessed=${true}`} className="px-3 md:px-5 py-2 text-sm text-pink-500 lg:text-white font-bold mr-0 sm:mr-3 relative z-40 md:mt-0">
               Login
             </a>
-            <a href="/login" className="px-5 py-3 rounded font-bold text-sm transition-all duration-300 leading-none bg-indigo-700 lg:bg-white text-white lg:text-indigo-700 w-auto sm:w-full h-full inline-block font-bold relative shadow-md lg:shadow-none hover:shadow-xl duration-100 transition z-40">
+            <a href={`/login?login_accessed=${false}`} className="px-5 py-3 rounded font-bold text-sm transition-all duration-300 leading-none bg-indigo-700 lg:bg-white text-white lg:text-indigo-700 w-auto sm:w-full h-full inline-block font-bold relative shadow-md lg:shadow-none hover:shadow-xl duration-100 transition z-40">
               Get Started
             </a>
             <HomeSVG />
