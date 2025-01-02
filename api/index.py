@@ -1,47 +1,16 @@
 from flask import Flask, jsonify, request
-from flask_restful import Api, Resource
 from flask_cors import CORS
-import os
-from dotenv import load_dotenv
-import boto3
+
 from db import *
 from id import generate_user_id
-import requests
-import json
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 CORS(app)
 
-# Load environment variables from .env file
-load_dotenv()
-
-def create_session():
-    """
-    Create a Boto3 session object.
-
-    The session object is used to create a DynamoDB client object,
-    which is then used to interact with the DynamoDB table.
-
-    :return: A Boto3 session object.
-    """
-    print('Connecting to AWS DynamoDB...')
-
-    # Create a Boto3 session object
-    session = boto3.Session(
-        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
-        region_name=os.getenv('AWS_REGION')
-    )
-
-    print('Connection to AWS DynamoDB Established!')
-
-    # Create a DynamoDB client object
-    global db
-    db = session.client('dynamodb')
-    print('AWS DynamoDB Session Created!')
-
+# Create a session with AWS DynamoDB
+create_session()
 
 @app.before_request
 def before_request():
