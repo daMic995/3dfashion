@@ -1,7 +1,8 @@
+"use client"
 import dynamic from 'next/dynamic';
-import bodyMeasurements, {metricUnit} from './body_measurement';
+import bodyMeasurements, {metricUnit} from '@/components/body_measurement';
 
-const MannequinViewer = dynamic(() => import('@/app/model/load_model'), { ssr: false });
+const MannequinViewer = dynamic(() => import('@/components/load_model'), { ssr: false });
 
 export default function Model() {
     return (
@@ -27,7 +28,7 @@ export default function Model() {
                     </div>
                 </section>
                 <section id="model" className="col-span-4">
-                    <MannequinViewer modelUrl="/models/female.glb" />
+                    <MannequinViewer modelUrl="/models/robot_playground.glb" />
                 </section>
             </div>
         </div>

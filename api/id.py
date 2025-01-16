@@ -1,8 +1,12 @@
-from nanoid import generate
+from random import randint
 
 def generate_user_id():
-    # Define a custom alphabet with only numeric characters
-    alphabet = '0123456789'
-    # Specify the length of the ID
-    size = 4
-    return generate(alphabet, size)
+    """
+    Generates a random 4-digit user ID.
+
+    Returns:
+        int: A random 4-digit user ID.
+    """
+    # Generate a random number between 1000 and 9999
+    id = randint(1000, 9999)
+    return id

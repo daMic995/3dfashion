@@ -1,87 +1,22 @@
 "use client"
-import { LifeBuoy, Receipt, Bell, UserCircle, Package, LayoutDashboard, Settings, Pencil, Ruler, ChevronFirst, MoreVertical } from "lucide-react";
+import { LifeBuoy, Receipt, Bell, UserCircle, Package, LayoutDashboard, Settings, Pencil, Ruler} from "lucide-react";
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { createContext, useContext, useState, useEffect } from "react";
-import Link from 'next/link';
+
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { Sidebar, SidebarItem, SidebarContext } from './Sidebar';
+const ModelViewer = dynamic(() => import('@/components/load_model'), { ssr: false });
 
-const SidebarContext = createContext({expanded: true});
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-function Sidebar({children, user}: {children: React.ReactNode, user: {first_name: string; last_name: string; email: string }}) {
-    const [expanded, setExpanded] = useState(true);
-
-    return (
-        <aside className={`h-screen ${expanded? "w-64" : "w-20"} transition-all duration-200 bg-white border-r shadow-sm`}>
-            <nav className="h-full flex flex-col bg-white border-r shadow-sm">
-                <div className="p-4 pb-2 flex justify-between items-center">
-                    <Link href="/">
-                        <img src="/3dfashion.png" alt="" 
-                            className={`overflow-hidden transition-all duration-200 h-16
-                            ${expanded? "w-16" : "w-0"}`}/>
-                    </Link>
-                    <button onClick={() => setExpanded(!expanded)} className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100">
-                        {expanded? <ChevronFirst size={20}/> : <ChevronFirst size={20} style={{transform: "rotate(180deg)"}}/>}
-                    </button>
-                </div>
-
-                <SidebarContext.Provider value={{expanded}}>
-                    <ul className="flex-1 px-4">{children}</ul>
-                </SidebarContext.Provider>
-
-                <div className="border-t flex px-5 py-4">
-                    <img src={`https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true&name=${user.first_name}+${user.last_name}`}
-                         className="w-10 h-10 rounded-md" alt="avatar"/>
-
-                    <div className={`flex justify-between items-center overflow-hidden transition-all duration-200
-                        ${expanded? "w-52 ml-3" : "w-0"}`}>
-
-                        <div className="leading-4">
-                            <h4 className="text-gray-600 flex font-semibold">{user.first_name}</h4>
-                            <span className="text-xs text-gray-400">{user.email}</span>
-                        </div>
-                        <MoreVertical size={20}/>
-                    </div>
-                </div>
-            </nav>
-        </aside>
-    )
-}
-
-function SidebarItem({icon, text, active, alert, onClick}: {icon: React.ReactNode, text: string, active?: boolean, alert?: boolean, onClick: () => void}) {
-    const {expanded} = useContext(SidebarContext);
-
-    return (
-        <li onClick={onClick} className={`
-            relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer 
-            transition-colors group
-            ${active ? "bg-gradient-to-r from-indigo-200 to-indigo-100 text-indigo-800" 
-            : "hover:bg-indigo-50 text-gray-600"}`}>
-
-            {icon}
-            <span className={`overflow-hidden transition-all
-                        ${expanded ? "w-52 ml-3" : "w-0"}`}>
-                {text}
-            </span>
-
-            {alert && (
-                <div className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 
-                ${ expanded ? "" : "top-2"}`}/>
-            )}
-            
-            {!expanded && 
-                <div className={`absolute left-full rounded-md px-2 py-1 ml-6
-                bg-indigo-100 text-sm text-indigo-800 invisible opacity-20 -translate-x-3 transition-all
-                group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
-                    {text}
-                </div>
-            }
-        </li>
-    )
-}
 
 export default function Dashboard() {
     const [user, setUser] = useState<{first_name: string; last_name: string; email: string } | null>(null);
     const [loading, setLoading] = useState(true);
-    const [activeItem, setActiveItem] = useState<string | null>(null);
+    const [activeItem, setActiveItem] = useState<string>('Dashboard');
+    const {expanded} = useContext(SidebarContext);
     const router = useRouter();
 
     useEffect(() => {
@@ -120,7 +55,7 @@ export default function Dashboard() {
     }, [router]);
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+        return <div className="min-h-screen flex items-center justify-center">Redirecting to Dashboard...</div>;
     }
 
     if (!user) {
@@ -131,8 +66,35 @@ export default function Dashboard() {
         setActiveItem(item);
     };
 
+    const data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+            {
+                label: 'New Connections',
+                data: [0, 10, 5, 2, 20, 30, 45],
+                fill: true,
+                backgroundColor: 'rgb(69, 3, 101)',
+                borderColor: 'rgba(192, 128, 223, 0.2)',
+            },
+        ],
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: 'Line Chart',
+            },
+        },
+    };
+
     return (
-        <div className="flex w-full">
+        <SidebarContext.Provider value={{expanded}}>
+        <div className="flex w-full overflow-hidden">
             <Sidebar user={user}>
                 <SidebarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={activeItem === "Dashboard"} onClick={() => handleItemClick("Dashboard")}/>
                 <SidebarItem icon={<Pencil size={20}/>} text="Designs" active={activeItem === "Designs"} onClick={() => handleItemClick("Designs")}/>
@@ -146,15 +108,15 @@ export default function Dashboard() {
                 <SidebarItem icon={<LifeBuoy size={20}/>} text="Help" active={activeItem === "Help"} onClick={() => handleItemClick("Help")}/>
             </Sidebar>
             
-            <div className="flex-1 flex flex-col overflow-hidden w-full">
+            <div id ="content" className={`flex-1 flex flex-col border-outline shadow-sm ${expanded ? "w-full" : "w-64"}`}>
                 <header className="flex justify-between items-center py-4 px-6 bg-white border-b">
                     <h2 className="font-semibold text-lg">{activeItem}</h2>
                     <div className="flex items-center p-2">
                         <button className="text-gray-500 hover:text-gray-600 mr-4">
-                            <Bell size={20}/>
+                            <Bell size={25}/>
                         </button>
                         <button className="text-gray-500 hover:text-gray-600">
-                            <UserCircle size={20}/>
+                            <UserCircle size={25}/>
                         </button>
                         <div className="ml-4">
                             <a href="/logout" className="px-5 py-3 rounded font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative">
@@ -164,13 +126,67 @@ export default function Dashboard() {
                     </div>
                 </header>
 
-                <div className="flex-1 overflow-y-auto">
-                    <div className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">Welcome, {user.first_name}!</h3>
-                        <p className="text-gray-600">This is your dashboard page.</p>
+                <main className="flex-1 h-full overflow-y-auto bg-gray-100">
+                    {/* Dashboard */}
+                    {activeItem === "Dashboard" &&
+                    <div className="p-6 transform transition-all duration-700">
+                        <h3 className="text-lg text-center font-semibold p-6 mb-4">Welcome, {user.first_name}!</h3>
+                        
+                        <div className="bg-white h-full shadow-md rounded-lg p-6 m-2">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <h4 className="text-lg font-semibold mb-4">3D Avatar</h4>
+                                    <p className="text-gray-600">View your most recent 3D avatar</p>
+                                </div>
+                                <div className="mt-4 style" style={{height: "50vh"}}>
+                                    <ModelViewer modelUrl="/models/robot_playground.glb" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 mt-6 h-96">
+                            <div className="bg-white h-full shadow-md rounded-lg p-6 m-2">
+                                <h4 className="text-lg font-semibold mb-4">Community Growth</h4>
+                                <hr className="my-3"/>
+                                <Line data={data} options={options} />
+                            </div>
+                            <div className="bg-white h-full shadow-md rounded-lg p-6 m-2">
+                                <h4 className="text-lg font-semibold mb-4">Chats</h4>
+                                <hr className="my-3"/>
+                                <div>
+                                    <p className="text-gray-600">Your chats will be displayed here...</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    }
+
+                    {/* Designs */}
+                    {activeItem === "Designs" &&
+                    <div className="p-6 text-center">
+                        <h3 className="text-lg font-semibold p-6 mb-4"> View and manage all your designs in one place</h3>
+                        <div className="bg-white shadow-md rounded-lg p-6 m-4">
+                            <div className="grid grid-cols-2 gap-4" style={{height: "80vh"}}>
+                                <div className="flex flex-col justify-center items-center p-4 m-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer">
+                                    <ModelViewer modelUrl="/models/FV2_Trench Coat_fbx_thick.glb" />
+                                </div>
+                                <div className="flex flex-col justify-center items-center p-4 m-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer">
+                                    <ModelViewer modelUrl="/models/robot_playground.glb" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    {/* Body Measurements */}
+                    {activeItem === "Body Measurements" &&
+                    <div className="p-6 text-center">
+                        <h3 className="text-lg font-semibold p-6 mb-4">Access your AI Generated Body Measurements</h3>
+                    </div>
+                    }
+                </main>
             </div>
         </div>
+        </SidebarContext.Provider>
     )
 }

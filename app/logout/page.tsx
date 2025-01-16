@@ -7,7 +7,7 @@ function logout() {
     console.log(localStorage.getItem('user_id'));
     setTimeout(() => {
         window.location.href = '/';
-    }, 100); // Delay the redirection slightly to ensure localStorage operations complete
+    }, 10); // Delay the redirection slightly to ensure localStorage operations complete
 }
 
 export default function Logout() {

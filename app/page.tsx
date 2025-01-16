@@ -1,8 +1,7 @@
 "use client";
 import Image from 'next/image'
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import integrations from './integrations';
+import integrations from '@/components/integrations';
 
 function index() {
   const [message, setMessage] = useState('Loading...');

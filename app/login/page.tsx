@@ -17,6 +17,11 @@ export default function AuthPage() {
     
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!loginEmail || !loginPassword) {
+            setMessage1('Please enter both email and password');
+            setStatus(400);
+            return;
+        }
         const response = await fetch('/api/python/authenticate', {
             method: 'POST',
             headers: {
@@ -36,6 +41,11 @@ export default function AuthPage() {
 
     const handleSignUpSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!signUpEmail || !signUpPassword || !firstName || !lastName) {
+            setMessage2('Please enter all fields');
+            setStatus(400);
+            return;
+        }
         const response = await fetch('/api/python/register', {
             method: 'POST',
             headers: {
@@ -92,8 +102,8 @@ export default function AuthPage() {
                                 <form className="w-full flex-1 mt-8" onSubmit={handleLoginSubmit}>
                                     <div className="flex flex-col items-center">
                                         <div className="mx-auto max-w-xs">
-                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
-                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5" type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="email" placeholder="Email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
+                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5" type="password" placeholder="Password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
                                             <button type="submit" className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                                 <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
@@ -140,10 +150,10 @@ export default function AuthPage() {
                                 <form className="w-full flex-1 mt-8" onSubmit={handleSignUpSubmit}>
                                     <div className="flex flex-col items-center">
                                         <div className="mx-auto max-w-xs">
-                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="text" placeholder="First Name" required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                                             <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="email" placeholder="Email" value={signUpEmail} onChange={(e) => setSignUpEmail(e.target.value)} />
-                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="password" placeholder="Password" value={signUpPassword} onChange={(e) => setSignUpPassword(e.target.value)} />
+                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="email" placeholder="Email" required value={signUpEmail} onChange={(e) => setSignUpEmail(e.target.value)} />
+                                            <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="password" placeholder="Password" required value={signUpPassword} onChange={(e) => setSignUpPassword(e.target.value)} />
                                             <button type="submit" className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                                 <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
