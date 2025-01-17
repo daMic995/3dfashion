@@ -41,14 +41,16 @@ export function Sidebar({children, user}: {children: React.ReactNode, user: {fir
     const [expanded, setExpanded] = useState(true);
 
     return (
-        <aside className={`h-screen ${expanded? "w-64" : "w-20"} transition-all duration-200 bg-white border-r shadow-sm z-10`}>
+        <aside id='sidebar' className={`h-auto ${expanded? "w-64" : "w-20"} transition-all duration-200 bg-white border-r shadow-sm z-10`}>
             <nav className="h-full flex flex-col bg-white border-r shadow-sm">
                 <div className="p-4 pb-2 flex justify-between items-center">
-                    <Link href="/">
-                        <img src="/3dfashion.png" alt="" 
-                            className={`overflow-hidden transition-all duration-200 h-16
-                            ${expanded? "w-16" : "w-0"}`}/>
-                    </Link>
+                    {expanded && 
+                    <Link href="/" className={`inline-block transition-all duration-200 flex items-center h-16 relative font-black leading-none`}>
+                        <span className={`text-xl bg-clip-text ml-3 transition-all duration-200 text-transparent bg-gradient-to-r from-indigo-500 to-black`}>
+                            3D Fashion.
+                        </span>
+                    </Link>}
+
                     <button onClick={() => setExpanded(!expanded)} className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100">
                         {expanded? <ChevronFirst size={20}/> : <ChevronFirst size={20} style={{transform: "rotate(180deg)"}}/>}
                     </button>

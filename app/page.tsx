@@ -1,6 +1,6 @@
 "use client";
-import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import { UserCircle } from "lucide-react";
+import React, { useEffect, useState } from 'react';
 import integrations from '@/components/integrations';
 
 function index() {
@@ -93,15 +93,14 @@ export default function Home() {
       <header className="bg-black h-24 w-full relative z-50">
         <div className="container max-w-6xl mx-auto h-full flex justify-center sm:justify-between items-center px-8 xl:px-0">
           <a href="/" className="inline-block h-full flex items-center h-5 relative font-black leading-none">
-            <Image src="/3dfashion.png" alt="logo" width={50} height={50} />
-            <span className="text-xl ml-3 text-gray-100">
-              3D Fashion<span className="text-purple-500">.</span>
+            <span className="text-xl ml-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-500">
+              3D Fashion.
             </span>
           </a>
 
           <nav
             id="nav"
-            className={`absolute left-0 w-full md:w-auto text-gray-600 flex-col md:flex-row h-64 md:h-24 justify-between text-sm lg:text-base bg-white md:bg-transparent top-0 mt-24 md:mt-0 border-t md:border-none border-gray-200 pt-5 md:py-0 z-50 flex ${
+            className={`absolute left-0 w-full md:w-auto text-gray-300 flex-col md:flex-row h-64 md:h-24 justify-between text-sm lg:text-base bg-white md:bg-transparent top-0 mt-24 md:mt-0 border-t md:border-none border-gray-200 pt-5 md:py-0 z-50 flex ${
               isNavVisible ? "flex" : "hidden"
             } md:flex items-center md:relative`}
           >
@@ -117,6 +116,9 @@ export default function Home() {
 
           {isLoggedIn ? (
             <div className="block md:hidden border-t border-gray-200 font-medium flex flex-col w-full">
+              <a href="/dashboard" className="py-2 text-white w-full text-center font-bold">
+                <UserCircle size={25} />
+              </a>
               <a href="/logout" className="px-5 py-3 font-bold text-sm leading-none bg-indigo-700 text-white w-full inline-block text-center relative">
                   Logout
               </a>
@@ -138,6 +140,9 @@ export default function Home() {
           
           {isLoggedIn ? (
           <div className="absolute left-0 md:relative w-full md:w-auto md:bg-transparent border-b md:border-none border-gray-200 mt-48 md:mt-0 flex-col md:flex-row pb-8 md:p-0 justify-center items-center md:items-end hidden md:flex md:justify-between">
+            <a href="/dashboard" className="px-3 md:px-5 py-2 md:py-1 lg:text-white font-bold mr-0 sm:mr-3 relative md:mt-0 z-40">
+              <UserCircle size={30}/>
+            </a>
             <a href="/logout" className="px-5 py-3 rounded font-bold text-sm transition-all duration-300 leading-none bg-indigo-700 lg:bg-white text-white lg:text-indigo-700 w-auto sm:w-full h-full inline-block font-bold relative shadow-md lg:shadow-none hover:shadow-xl duration-100 transition z-40">
               Logout
             </a>
@@ -165,26 +170,26 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section id="hero" className="bg-black w-full justify-center items-center relative overflow-x-hidden lg:pt-40 lg:pb-40 xl:pt-40 xl:pb-64">
-        <div className="container max-w-6xl mx-auto h-full flex flex-col lg:flex-row justify-between items-center -mt-32 px-8 xl:px-0">
+      <section id="hero" className="bg-gradient-to-b from-black via-gray-200 to-gray-900 w-full justify-center items-center relative overflow-x-hidden lg:pt-40 lg:pb-40 xl:pt-40 xl:pb-64">
+        <div className="container max-w-6xl mx-auto h-full flex flex-col lg:flex-row justify-between items-center -mt-40 px-8 xl:px-0">
           <div className="flex flex-col items-center lg:items-start w-full max-w-xl lg:w-1/2 pt-48 lg:pt-20 xl:pt-40 text-center lg:text-left z-30">
-            <h1 className="text-gray-100 font-black text-3xl sm:text-6xl leading-tight relative mb-4 xl:mb-8">
+            <h1 className="text-white font-black text-3xl sm:text-6xl leading-tight relative mb-4 xl:mb-8">
               3D Fashion
             </h1>
-            <p className="text-gray-400 text-base sm:text-lg xl:text-xl text-gray-600 mb-8 pr-0 lg:pr-20">
+            <div className="text-gray-200 text-base sm:text-lg xl:text-xl mb-8 pr-0 lg:pr-20">
               With 3D precision, AI-powered body measurement and a talented pick of tailors, 
               we aim to provide you with an effortless outlet for your creative fashion needs.
-            </p>
-            <p className="text-base sm:text-lg xl:text-xl text-gray-500 mb-8 pr-0 lg:pr-20">
+            </div>
+            <p className="text-base sm:text-lg xl:text-xl text-gray-400 mb-4 pr-0 lg:pr-20">
               Envision. Design. Tailor.
               </p>
             <a href="/model"
-              className="mt-0 sm:mt-1 px-8 py-4 rounded-md font-bold text-base bg-indigo-600 shadow-xl text-white border-t border-gray-200 w-auto relative self-start inline-block lg:mx-0 mx-auto">
+              className="mt-0 sm:mt-1 px-8 py-4 rounded-md font-bold text-base bg-indigo-600 text-white w-auto relative self-start inline-block lg:mx-0 mx-auto">
               3D Model Tool
             </a>
             
             {/* Integrations */}
-            <div className="hidden sm:flex flex-col mt-12 lg:mt-24">
+            <div className="hidden sm:flex flex-col mt-6 lg:mt-12">
               <p className="text-gray-500 uppercase font-medium tracking-widest mb-4 text-sm">
                 Integrates With
               </p>
@@ -258,14 +263,14 @@ export default function Home() {
       {/* Features Section */}
       <section id="features" className="bg-white w-full relative py-10 md:py-16 lg:py-24 xl:py-40 border-t border-gray-200 px-8 xl:px-0">
         <div className="container max-w-6xl mx-auto h-full flex flex-col justify-between items-center">
-          <h2 className="text-indigo-500 uppercase text-base font-medium tracking-tight my-5">Our Features</h2>
-          <h3 className="font-black text-3xl mt-2 sm:mt-0 px-5 sm:px-0 sm:text-6xl max-w-2xl leading-tight text-gray-900 text-center">
-          Design and seamlessly share your creations with tailors
+          <h2 className="text-indigo-500 uppercase text-base font-medium tracking-tight my-1">Our Features</h2>
+          <h3 className="font-black text-lg sm:mt-0 px-5 sm:px-0 sm:text-6xl max-w-xl leading-tight text-gray-900 text-center">
+            Design and seamlessly share your creations with tailors
           </h3>
-          <div className="flex flex-col lg:flex-row w-full mt-0 sm:mt-10 lg:mt-20">
+          <div className="flex flex-col lg:flex-row w-full mt-0 sm:mt-10 lg:mt-8">
             {/* Feature 1 */}
-            <div className="w-full max-w-md mx-auto mb-0 sm:mb-16 lg:mb-0 lg:w-1/3 p-4">
-              <div className="flex flex-col justify-center items-center w-full h-full mr-5 p-20 rounded-lg relative">
+            <div className="w-full max-w-md mx-auto mb-0 sm:mb-8 lg:mb-0 lg:w-1/3 p-2">
+              <div className="flex flex-col justify-center items-center w-full h-full mr-5 p-16 rounded-lg relative">
                 <svg
                   className="w-full h-full absolute fill-current text-gray-100"
                   viewBox="0 0 377 340"
@@ -514,9 +519,9 @@ export default function Home() {
           <div className="w-full lg:w-1/4 mr-4 text-left sm:text-center pl-12 sm:pl-0 lg:text-left">
             <a
               href="/"
-              className="block text-left sm:text-center lg:text-left flex justify-start sm:justify-center lg:justify-start">
-              <span className="flex items-start sm:items-center">
-                <Image src="/3dfashion.png" alt="logo" width={50} height={50} />
+              className="block font-black text-left sm:text-center lg:text-left flex justify-start sm:justify-center lg:justify-start">
+              <span className="text-xl bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-500">
+                3D Fashion.
               </span>
             </a>
             <p className="text-gray-300 text-base mr-4 mt-6">

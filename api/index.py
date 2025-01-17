@@ -1,14 +1,26 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from db import create_session, get_user, insert_user, get_all_users
-from id import generate_user_id
+from random import randint
+
+from api.db import create_session, get_user, insert_user, get_all_users
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 CORS(app)
 
+
+def generate_user_id():
+    """
+    Generates a random 4-digit user ID.
+
+    Returns:
+        int: A random 4-digit user ID.
+    """
+    # Generate a random number between 1000 and 9999
+    id = randint(1000, 9999)
+    return id
 
 @app.before_request
 def before_request():
@@ -69,7 +81,8 @@ def register():
         return jsonify({"message": "Error creating user", "status": response})
     
     # Return the response
-    return jsonify({"message": "User Created", "user_id": user_id, "status": response})
+    return jsonify({"message": "User Created", 
+                    "user_id": user_id, "status": response})
 
 
 @app.route("/api/python/authenticate", methods=["GET", "POST"])
@@ -117,9 +130,10 @@ def authenticate():
         # Get the user by email from the database
         response = get_user(db, email)
 
-        if not response:
+        if not (response or response['Items']):
+            print(response)
             return jsonify({"message": "User Not Found", "status": 404})
-
+        
         user = response['Items'][0]
         hashed_password = user['Password']['S']
 

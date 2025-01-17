@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -22,20 +23,29 @@ export default function AuthPage() {
             setStatus(400);
             return;
         }
-        const response = await fetch('/api/python/authenticate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: loginEmail, password: loginPassword }),
-        });
-        const data = await response.json();
-        setMessage1(data.message);
-        setStatus(data.status);
 
-        if (data.status === 200) {
-            localStorage.setItem('user_id', data.user_id);
-            router.push('/dashboard'); // Redirect to the dashboard page on successful login
+        try {
+            const response = await fetch('/api/python/authenticate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+            });
+            const data = await response.json();
+            setMessage1(data.message);
+            setStatus(data.status);
+
+            if (data.status === 200) {
+                localStorage.setItem('user_id', data.user_id);
+                router.push('/dashboard'); // Redirect to the dashboard page on successful login
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+            setMessage1('An error occurred while logging in. Please try again.');
+            setStatus(500);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -46,20 +56,29 @@ export default function AuthPage() {
             setStatus(400);
             return;
         }
-        const response = await fetch('/api/python/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: signUpEmail, password: signUpPassword, firstName, lastName }),
-        });
-        const data = await response.json();
-        setMessage2(data.message);
-        setStatus(data.status);
 
-        if (data.status === 200) {
-            localStorage.setItem('user_id', data.user_id);
-            router.push('/dashboard'); // Redirect to the dashboard page on successful sign-up
+        try {
+            const response = await fetch('/api/python/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: signUpEmail, password: signUpPassword, firstName, lastName }),
+            });
+            const data = await response.json();
+            setMessage2(data.message);
+            setStatus(data.status);
+
+            if (data.status === 200) {
+                localStorage.setItem('user_id', data.user_id);
+                router.push('/dashboard'); // Redirect to the dashboard page on successful sign-up
+            }
+        } catch (error) {
+            console.error('Error signing up:', error);
+            setMessage2('An error occurred while signing up. Please try again.');
+            setStatus(500);
+        } finally {
+            setLoading(false);
         }
     };
 
