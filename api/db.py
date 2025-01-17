@@ -16,23 +16,28 @@ def create_session():
     """
     print('Connecting to AWS DynamoDB...')
 
-    # Create a Boto3 session object
-    session = boto3.Session(
-        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
-        region_name=os.getenv('AWS_REGION')
-    )
+    try:
+        # Create a Boto3 session object
+        session = boto3.Session(
+            aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+            region_name=os.getenv('AWS_REGION')
+        )
 
-    print('Connection to AWS DynamoDB Established!')
+        print('Connection to AWS DynamoDB Established!')
 
-    # Create a DynamoDB client object
-    db = session.client('dynamodb')
-    print('AWS DynamoDB Session Created!')
+        # Create a DynamoDB client object
+        db = session.client('dynamodb')
+        print('AWS DynamoDB Session Created!')
 
-    return db
+        return db
+
+    except Exception as e:
+        print(f'Error creating AWS DynamoDB session: {e}')
+        return None
 
 
-def insert_user(db, user):
+def insert_user(user):
     """
     Insert a new user into the DynamoDB table.
 
@@ -42,6 +47,12 @@ def insert_user(db, user):
     Returns:
         int: The HTTP status code from the DynamoDB response.
     """
+    db = create_session()
+
+    if db is None:
+        return None
+
+    print('Inserting user....')
     response = db.put_item(
         TableName='Users',
         Item={
@@ -54,7 +65,7 @@ def insert_user(db, user):
     )
     return response['ResponseMetadata']['HTTPStatusCode']
 
-def get_user(db, email):
+def get_user(email):
     """
     Retrieve a single user from the DynamoDB table.
 
@@ -64,6 +75,11 @@ def get_user(db, email):
     Returns:
         dict: A dictionary containing the user's information.
     """
+    db = create_session()
+
+    if db is None:
+        return None
+    
     print('Getting user....')
     response = db.query(
         TableName='Users',
@@ -75,13 +91,18 @@ def get_user(db, email):
     # The response will contain a single item in the Items list
     return response
 
-def get_all_users(db):
+def get_all_users():
     """
     Retrieve all users from the DynamoDB table.
 
     Returns:
         dict: A dictionary containing the response from DynamoDB.
     """
+    db = create_session()
+
+    if db is None:
+        return None
+    
     print('Getting all users....')
     # Scan the entire DynamoDB table to retrieve all users
     response = db.scan(
@@ -99,6 +120,11 @@ def delete_user(db, email):
     Returns:
         int: The HTTP status code from the DynamoDB response.
     """
+    db = create_session()
+
+    if db is None:
+        return None
+    
     print('Deleting user....')
     response = db.delete_item(
         TableName='Users',

@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 from random import randint
 
-from api.db import create_session, get_user, insert_user, get_all_users
+from api.db import get_user, insert_user, get_all_users
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -26,11 +26,8 @@ def generate_user_id():
 def before_request():
     """
     This function is executed before every request.
-    It sets up a connection to the AWS DynamoDB by creating a session.
     """
-    # Establish a session with AWS DynamoDB
-    global db
-    db = create_session()
+    pass
 
 
 @app.route("/")
@@ -55,8 +52,10 @@ def register():
     password = data.get('password')
 
     # Check if the user already exists
-    response = get_user(db, email)
-    print(response)
+    response = get_user(email)
+
+    if response is None:
+        return jsonify({"message": "Error connecting to database", "status": 500})
 
     if response['Count'] > 0:
         return jsonify({"message": "User with this email already exists", "status": 409})
@@ -74,8 +73,9 @@ def register():
     }
 
     # Insert the user into the database
-    response = insert_user(db, user)
-    print(response)
+    response = insert_user(user)
+    if response is None:
+        return jsonify({"message": "Error connecting to database", "status": 500})
 
     if response != 200:
         return jsonify({"message": "Error creating user", "status": response})
@@ -102,7 +102,10 @@ def authenticate():
         user_id = request.args.get('user_id')
 
         # Get all the users from the database
-        users = get_all_users(db)
+        users = get_all_users()
+
+        if users is None:
+            return jsonify({"message": "Error connecting to database", "status": 500})
 
         # Loop through the users and check if the user_id matches
         for user in users['Items']:
@@ -128,7 +131,7 @@ def authenticate():
         password = data.get('password')
 
         # Get the user by email from the database
-        response = get_user(db, email)
+        response = get_user(email)
 
         if not (response or response['Items']):
             print(response)
