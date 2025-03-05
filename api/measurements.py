@@ -3,7 +3,7 @@ import json
 
 def get_measurements(front, side):
     # Load test body measurement from file
-    with open('api/measurements.json', 'r') as f:
+    with open('api/body_measurements.json', 'r') as f:
         body_measurements = json.load(f)
 
     return body_measurements
