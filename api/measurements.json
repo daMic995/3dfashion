@@ -1,0 +1,74 @@
+{
+  "upperBody": {
+    "neck": {
+      "measurement": 34.69,
+      "unit": "cm",
+      "provided": true
+    },
+    "shoulder": {
+      "measurement": 46.64,
+      "unit": "cm",
+      "provided": true
+    },
+    "chest": {
+      "measurement": 91.32,
+      "unit": "cm",
+      "provided": true
+    },
+    "waist": {
+      "measurement": 85.15,
+      "unit": "cm",
+      "provided": true
+    },
+    "sleeve": {
+      "provided": false
+    },
+    "bicep": {
+      "measurement": 29.78,
+      "unit": "cm",
+      "provided": true
+    },
+    "armhole": {
+      "provided": false
+    },
+    "backLength": {
+      "measurement": 20.89,
+      "unit": "cm",
+      "provided": true,
+      "note": "partial measurement - back to shoulder"
+    }
+  },
+  "lowerBody": {
+    "hip": {
+      "measurement": 99.01,
+      "unit": "cm",
+      "provided": true
+    },
+    "outseam": {
+      "provided": false
+    },
+    "inseam": {
+      "measurement": 74.50,
+      "unit": "cm",
+      "provided": true
+    },
+    "thigh": {
+      "measurement": 57.78,
+      "unit": "cm",
+      "provided": true
+    },
+    "knee": {
+      "provided": false
+    },
+    "calf": {
+      "measurement": 36.91,
+      "unit": "cm",
+      "provided": true
+    },
+    "ankle": {
+      "measurement": 23.55,
+      "unit": "cm",
+      "provided": true
+    }
+  }
+}

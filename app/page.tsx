@@ -72,8 +72,9 @@ const HomeSVG = () => {
 export default function Home() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    // Use useEffect to run this code when the page loads
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && window.document) {
             // Check if user is logged in
             const userId = localStorage.getItem('user_id');
             console.log(userId);

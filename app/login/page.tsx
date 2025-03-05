@@ -2,11 +2,23 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { ThreeCircles } from 'react-loader-spinner';
+
+const Loader = () => {
+    return (
+        <div className='flex items-center justify-center mt-8'>
+            <ThreeCircles color="#6366F1" height={35} width={35} />
+        </div>
+    );
+}
+
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
-    const [loading, setLoading] = useState(false);
+    const [loading1, setLoading1] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const router = useRouter();
 
+    // Check if the "login_accessed" query parameter is present in the URL
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const loginAccessed = params.get('login_accessed');
@@ -23,6 +35,8 @@ export default function AuthPage() {
             setStatus(400);
             return;
         }
+
+        setLoading1(true);
 
         try {
             const response = await fetch('/api/python/authenticate', {
@@ -45,7 +59,7 @@ export default function AuthPage() {
             setMessage1('An error occurred while logging in. Please try again.');
             setStatus(500);
         } finally {
-            setLoading(false);
+            setLoading1(false);
         }
     };
 
@@ -56,6 +70,8 @@ export default function AuthPage() {
             setStatus(400);
             return;
         }
+
+        setLoading2(true);
 
         try {
             const response = await fetch('/api/python/register', {
@@ -78,7 +94,7 @@ export default function AuthPage() {
             setMessage2('An error occurred while signing up. Please try again.');
             setStatus(500);
         } finally {
-            setLoading(false);
+            setLoading2(false);
         }
     };
 
@@ -123,6 +139,7 @@ export default function AuthPage() {
                                         <div className="mx-auto max-w-xs">
                                             <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="email" placeholder="Email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
                                             <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5" type="password" placeholder="Password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+                                            {loading1 ? <Loader /> :
                                             <button type="submit" className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                                 <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
@@ -131,6 +148,7 @@ export default function AuthPage() {
                                                 </svg>
                                                 <span className="ml-3">Sign In</span>
                                             </button>
+                                            }
                                             <p className="mt-6 text-xs text-gray-600 text-center">
                                                 I agree to abide by 3D Fashion's {" "}
                                                 <a href="#" className="border-b border-gray-500 border-dotted">Terms of Service</a>
@@ -173,6 +191,7 @@ export default function AuthPage() {
                                             <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                                             <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="email" placeholder="Email" required value={signUpEmail} onChange={(e) => setSignUpEmail(e.target.value)} />
                                             <input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="password" placeholder="Password" required value={signUpPassword} onChange={(e) => setSignUpPassword(e.target.value)} />
+                                            {loading2 ? <Loader /> :
                                             <button type="submit" className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                                 <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
@@ -181,6 +200,7 @@ export default function AuthPage() {
                                                 </svg>
                                                 <span className="ml-3">Sign Up</span>
                                             </button>
+                                            }
                                             <p className="mt-6 text-xs text-gray-600 text-center">
                                                 I agree to abide by 3D Fashion's {" "}
                                                 <a href="#" className="border-b border-gray-500 border-dotted">Terms of Service</a>

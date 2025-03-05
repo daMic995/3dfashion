@@ -4,6 +4,7 @@ from flask_cors import CORS
 from random import randint
 
 from api.db import get_user, insert_user, get_all_users
+from api.measurements import get_measurements
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -45,7 +46,6 @@ def register():
 
     # Get the data from the request body
     data = request.json
-    print(data)
     first_name = data.get('firstName')
     last_name = data.get('lastName')
     email = data.get('email')
@@ -133,10 +133,11 @@ def authenticate():
         # Get the user by email from the database
         response = get_user(email)
 
-        if not (response or response['Items']):
+        if not (response or response.get('Items')):
             print(response)
             return jsonify({"message": "User Not Found", "status": 404})
         
+        print(response['Items'])
         user = response['Items'][0]
         hashed_password = user['Password']['S']
 
@@ -147,3 +148,18 @@ def authenticate():
         # Return the user_id
         return jsonify({"message": "User Authenticated", 
                         "user_id": user['ID']['N'], "status": 200})
+    
+
+@app.route("/api/python/upload", methods=["POST"])
+def upload():
+
+    # Get the image files from the request
+    frontview = request.files['frontView']
+    sideview = request.files['sideView']
+    
+    # Process the images and get the measurements
+    measurements_data = get_measurements(frontview, sideview)
+
+    return jsonify({"message": "Body Measurements Processed",
+                    "measurements": measurements_data,
+                    "status": 200})

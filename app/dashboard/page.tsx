@@ -6,23 +6,46 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { Sidebar, SidebarItem, SidebarContext } from './Sidebar';
-const ModelViewer = dynamic(() => import('@/components/load_model'), { ssr: false });
+import { Sidebar, SidebarItem, SidebarContext } from './sidebar';
+
+import { ThreeCircles } from 'react-loader-spinner';
+import { MdOutlineFileDownload } from "react-icons/md";
+import { mapLinear } from "three/src/math/MathUtils";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+const Loader = () => {
+    return (
+        <div className='flex items-center justify-center'>
+            <ThreeCircles color="#6366F1" height={60} width={60} />
+        </div>
+    );
+}
 
 export default function Dashboard() {
     const [user, setUser] = useState<{first_name: string; last_name: string; email: string } | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeItem, setActiveItem] = useState<string>('Dashboard');
     const {expanded} = useContext(SidebarContext);
+
+    // Initialize router
     const router = useRouter();
+
+    interface Measurements {
+        [bodyPart: string]: { [key: string]: { measurement: number; unit: string; provided: boolean } };
+    };
+
+    const [measurements, setMeasurements] = useState<Measurements | null>(null);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             const userId = localStorage.getItem('user_id');
-            console.log(userId);
+        
+            const bodyMeasurements = localStorage.getItem('measurements');
+            if (bodyMeasurements) {
+                setMeasurements(JSON.parse(bodyMeasurements));
+            }
+
             if (!userId) {
                 router.push('/login');
                 return;
@@ -55,11 +78,26 @@ export default function Dashboard() {
     }, [router]);
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">Redirecting to Dashboard...</div>;
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center text-center bg-white">
+                <div className='flex flex-col'>
+                    <h1 className="text-2xl lg:md:text-3xl font-bold mb-8">Redirecting to Dashboard...</h1>
+                    <Loader />
+                </div>
+            </div>
+        );
     }
 
     if (!user) {
-        return <div className="min-h-screen flex items-center justify-center">Failed to load user info</div>;
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center text-center bg-white">
+                <div className='flex flex-col'>
+                    <h1 className="text-2xl lg:md:text-3xl font-bold mb-8">Failed to load user info</h1>
+                    <button className='bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700'
+                    onClick={() => router.push('/login')}>Login</button>
+                </div>
+            </div>
+        );
     }
 
     const handleItemClick = (item: string) => {
@@ -91,6 +129,10 @@ export default function Dashboard() {
             },
         },
     };
+
+    function downloadMeasurements() {
+        
+    }
 
     return (
         <SidebarContext.Provider value={{expanded}}>
@@ -136,7 +178,7 @@ export default function Dashboard() {
                                         <p className="text-gray-600">View your most recent 3D avatar</p>
                                     </div>
                                     <div className="mt-4 style" style={{height: "50vh"}}>
-                                        <ModelViewer modelUrl="/models/robot_playground.glb" />
+                                        {/* Model Goes Here */}
                                     </div>
                                 </div>
                             </div>
@@ -165,10 +207,10 @@ export default function Dashboard() {
                             <div className="bg-white shadow-md rounded-lg p-6 m-4">
                                 <div className="grid grid-cols-2 gap-4" style={{height: "80vh"}}>
                                     <div className="flex flex-col justify-center items-center p-4 m-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer">
-                                        <ModelViewer modelUrl="/models/FV2_Trench Coat_fbx_thick.glb" />
+                                        {/* Model Goes Here */}
                                     </div>
                                     <div className="flex flex-col justify-center items-center p-4 m-6 rounded-lg shadow-md hover:shadow-xl cursor-pointer">
-                                        <ModelViewer modelUrl="/models/robot_playground.glb" />
+                                        {/* Model Goes Here */}
                                     </div>
                                 </div>
                             </div>
@@ -176,9 +218,48 @@ export default function Dashboard() {
                         }
 
                         {/* Body Measurements */}
-                        {activeItem === "Body Measurements" &&
+                        {(activeItem === "Body Measurements") &&
                         <div className="p-6 text-center">
                             <h3 className="text-lg font-semibold p-6 mb-4">Access your AI Generated Body Measurements</h3>
+                            {measurements ?
+                            <div className="flex flex-col text-left bg-white rounded-lg p-8 m-4">
+                                <h1 className="justify-end text-right">
+                                    <MdOutlineFileDownload size={30} className="inline-block mr-2 cursor-pointer text-gray-600" onClick={() => downloadMeasurements()}/>
+                                </h1>
+                                <div className="grid grid-cols-2 gap-2">
+
+                            {Object.keys(measurements).map((part) => {
+                                return (
+                                    <div key={part}>
+                                        <table>
+                                            <tr>
+                                                <th colSpan={2} className="text-xl font-semibold pb-4">{part}</th>
+                                            </tr>
+                                            <tr className="text-gray-600 border-indigo-600 border ml-2">
+                                                <td className="pt-4 pb-4 pl-2" style={{width: "80%"}}>Measurement</td>
+                                                <td>Value</td>
+                                            </tr>                                   
+                                            {Object.keys(measurements[part]).map((key) => {
+                                                return (
+                                                    <tr key={key} className="border-b">
+                                                        <td className="pt-4 pb-4 pl-2">{key}</td>
+                                                        <th className="pt-4 pb-4">{measurements[part][key].measurement} {measurements[part][key].unit}</th>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </table>
+                                    </div>
+                                )
+                            })}
+                                </div>
+                                
+                            </div> :
+                            <div>
+                                <h4 className="text-lg text-gray-600 mb-8">No measurements available</h4>
+                                <button className='bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700'
+                                onClick={() => router.push('/upload')}>Get Body Measurements</button>
+                            </div>
+                            }
                         </div>
                         }
                     </main>
