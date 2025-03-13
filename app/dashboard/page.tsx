@@ -130,10 +130,6 @@ export default function Dashboard() {
         },
     };
 
-    function downloadMeasurements() {
-        
-    }
-
     return (
         <SidebarContext.Provider value={{expanded}}>
             <div className="flex w-full overflow-hidden-x">
@@ -224,7 +220,7 @@ export default function Dashboard() {
                             {measurements ?
                             <div className="flex flex-col text-left bg-white rounded-lg p-8 m-4">
                                 <h1 className="justify-end text-right">
-                                    <MdOutlineFileDownload size={30} className="inline-block mr-2 cursor-pointer text-gray-600" onClick={() => downloadMeasurements()}/>
+                                    <MdOutlineFileDownload size={30} className="inline-block mr-2 cursor-pointer text-gray-600"/>
                                 </h1>
                                 <div className="grid grid-cols-2 gap-2">
 
