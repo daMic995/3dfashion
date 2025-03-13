@@ -2,15 +2,13 @@
 import { LifeBuoy, Receipt, Bell, Package, LayoutDashboard, Settings, Pencil, Ruler} from "lucide-react";
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { createContext, useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Sidebar, SidebarItem, SidebarContext } from './sidebar';
 
 import { ThreeCircles } from 'react-loader-spinner';
 import { MdOutlineFileDownload } from "react-icons/md";
-import { mapLinear } from "three/src/math/MathUtils";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -100,8 +98,18 @@ export default function Dashboard() {
         );
     }
 
+    // Handle tab switch
     const handleItemClick = (item: string) => {
         setActiveItem(item);
+    };
+
+    // Get search params from url
+    const searchParams = useSearchParams();
+    console.log(searchParams);
+    const tab = searchParams.get('tab');
+    // Check if tab is in search params url
+    if (tab) {
+        setActiveItem(tab);
     };
 
     const data = {
@@ -136,7 +144,7 @@ export default function Dashboard() {
                 <Sidebar user={user}>
                     <SidebarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={activeItem === "Dashboard"} onClick={() => handleItemClick("Dashboard")}/>
                     <SidebarItem icon={<Pencil size={20}/>} text="Designs" active={activeItem === "Designs"} onClick={() => handleItemClick("Designs")}/>
-                    <SidebarItem icon={<Ruler size={20}/>} text="Measurement" active={activeItem === "Body Measurements"} onClick={() => handleItemClick("Body Measurements")}/>
+                    <SidebarItem icon={<Ruler size={20}/>} text="Measurement" active={activeItem === "Measurements"} onClick={() => handleItemClick("Body Measurements")}/>
                     <SidebarItem icon={<Package size={20}/>} text="Orders" active={activeItem === "Orders"} onClick={() => handleItemClick("Orders")} alert/>
                     <SidebarItem icon={<Receipt size={20}/>} text="Billings" active={activeItem === "Billings"} onClick={() => handleItemClick("Billings")}/>
 
@@ -214,7 +222,7 @@ export default function Dashboard() {
                         }
 
                         {/* Body Measurements */}
-                        {(activeItem === "Body Measurements") &&
+                        {(activeItem === "Measurements") &&
                         <div className="p-6 text-center">
                             <h3 className="text-lg font-semibold p-6 mb-4">Access your AI Generated Body Measurements</h3>
                             {measurements ?

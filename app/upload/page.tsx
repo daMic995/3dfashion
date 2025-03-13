@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { createContext, useState, useEffect} from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { ImCancelCircle } from "react-icons/im";
 import { IoIosCloudUpload } from "react-icons/io";
 
@@ -63,7 +63,7 @@ export default function Upload() {
                 <h1 className="text-2xl lg:md:text-3xl font-bold mb-8">Success!</h1>
                 <p className="text-lg text-gray-600 mb-4">Your images have been successfully uploaded and processed.</p>
                 <button className='bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700'
-                onClick={() => router.push('/dashboard')}>Access Body Measurements</button>
+                onClick={() => router.push('/dashboard?tab=Measurements')}>Access Body Measurements</button>
             </div>
         )
     };
